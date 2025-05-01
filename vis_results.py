@@ -19,6 +19,54 @@ print(allo4)
 print(obj_final4)
 print(iter4)
 
+out = obj_list4[0,ind_op]
+out = out[0][0]
+#print(out)
+out = out.flatten()
+
+# 创建图形和两个y轴
+fig, ax1 = plt.subplots(figsize=(12, 6))
+ax2 = ax1.twinx()  # 创建第二个y轴
+
+# 计算x轴数据
+x = np.arange(len(out)-1)
+
+# 在左轴上画第一条线
+line1, = ax1.plot(x, np.array(out[-1]-out[:-1]), 'b-', label=r'out[-1]-out[:-1]')
+ax1.set_ylabel('Original Scale', color='blue')
+ax1.tick_params(axis='y', labelcolor='blue')
+
+# 在右轴上画第二条线
+line2, = ax2.plot(x, np.log10(np.array(out[-1]-out[:-1])), 'r-', label=r'log10')
+ax2.set_ylabel('Log Scale', color='red')
+ax2.tick_params(axis='y', labelcolor='red')
+
+# 添加网格线
+ax1.grid(True, linestyle='--', alpha=0.7)
+
+# 设置标题
+plt.title('Convergence', fontsize=14)
+ax1.set_xlabel('Iterations', fontsize=12)
+
+# 合并两个线的图例
+lines = [line1, line2]
+labels = [l.get_label() for l in lines]
+ax1.legend(lines, labels, loc='upper right')
+
+# 调整布局
+plt.tight_layout()
+
+# 保存图像
+plt.savefig('Results/Convergence.png', dpi=300, bbox_inches='tight')
+plt.show()
+# plt.figure(figsize=(10, 6))
+# # Converence to the optimal value 
+# plt.plot(np.arange(len(out)-1),np.array(out[-1]-out[:-1]),'b')
+# plt.plot(np.arange(len(out)-1),np.log10( np.array(out[-1]-out[:-1]) ),'b')
+# plt.legend((r'out[-1]-out[:-1]',r'log10'), loc = 'upper right')
+# plt.title('Convergence')
+# plt.savefig('Results/Convergence.png', dpi=300, bbox_inches='tight')
+
 
 fig, ax1 = plt.subplots(figsize=(12, 6))
 ax2 = ax1.twinx()  # 创建第二个y轴
