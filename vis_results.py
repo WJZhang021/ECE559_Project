@@ -1,4 +1,5 @@
 import scipy.io as sio
+import json
 from performance import performance_O
 from costs import total_C
 import matplotlib.pyplot as plt
@@ -8,16 +9,25 @@ import numpy as np
 data = sio.loadmat('Results/Apr29.mat')
 
 # 获取各个变量
-para = data['para']
+#para = data['para']
 allo4 = data['allo4']
 obj_final4 = data['obj_final4']
 obj_list4 = data['obj_list4'] 
 iter4 = data['iter4']
 ind_op = data['ind_op']
 
-print(allo4)
-print(obj_final4)
-print(iter4)
+# print(allo4)
+# print(obj_final4)
+# print(iter4)
+
+with open('Results/Apr29_para.json', 'r', encoding='utf-8') as f:
+    config = json.load(f)    
+para = config['para']
+C_para = ['c1', 'c2', 'c3', 'alpha3', 's3', 'c4', 'c5']
+O_para = ['w1', 'q1', 'r1', 'w2', 'q2', 'r2', 'u2', 'w3', 'beta3', 'w4', 'w5', 'w12', 'w34', 'w35']
+para_C = {key: para[key] for key in C_para}
+para_O = {key: para[key] for key in O_para}
+
 
 out = obj_list4[0,ind_op]
 out = out[0][0]
@@ -83,8 +93,8 @@ lines2 = []
 for i in range(4):
     yi = np.zeros(len(x_labels))
     yi[0:5] = allo4[i]
-    yi[5] = performance_O(*allo4[i].tolist())
-    yi[6] = total_C(*allo4[i].tolist())
+    yi[5] = performance_O(*allo4[i].tolist(), **para_O)  # 计算性能
+    yi[6] = total_C(*allo4[i].tolist(), **para_C)  # 计算成本
     yi[7] = obj_final4[0,i]
     
     # 分别画前5点和后3点

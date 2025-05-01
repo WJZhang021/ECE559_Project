@@ -1,6 +1,7 @@
 import numpy as np
 from total_objective import TO, grad_TO_grad_ai
 import scipy.io as sio
+import json
 
 def gradient_ascent(a1_init, a2_init, a3_init, a4_init, a5_init,
                     B=30, lambda_val=0.3, w1=5, q1=30, r1=0.5, w2=1,
@@ -101,10 +102,22 @@ if __name__ == "__main__":
         }
         
     # 保存结果
-    save_dir = 'Results/Apr29.mat'
-    sio.savemat(save_dir, output_data)
-
-    print(f"Results saved to {save_dir}")
+    save_name = 'Results/Apr29'
+    sio.savemat(save_name+'.mat', output_data)
+    print(f"Results saved to {save_name+'.mat'}")
+    
+    json_data = {
+        "para": para,
+        # "allo4": allo4,
+        # "obj_final4": obj_final4.tolist(),
+        # "obj_list4": [obj.tolist() for obj in obj_list4],
+        # "iter4": iter4.tolist(),
+        # "ind_op": ind_op 
+    }
+       
+    with open(save_name+'_para.json', 'w', encoding='utf-8') as f:
+        json.dump(json_data, f, indent=2, ensure_ascii=False)
+    print(f"Parameters saved to {save_name+'.json'}")
     
     print(f"Optimal Allocation: {allo4[ind_op]}")
     print(f"Optimal Objective Value: {obj_final4[ind_op]}")
